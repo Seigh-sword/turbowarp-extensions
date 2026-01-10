@@ -9,7 +9,7 @@
   "use strict";
 
   if (!Scratch.extensions.unsandboxed) {
-    throw new Error("Turbo Bot must run unsandboxed. Please click 'Run extension without sandbox' in the editor.");
+    throw new Error("Turbo Bot must run unsandboxed so, Please let this extension run without sandbox.");
   }
 
   const icon = "https://raw.githubusercontent.com/Seigh-sword/TurboBot-Turbwarp/refs/heads/main/assets/TurboBotIcon.png";
@@ -18,7 +18,7 @@
 
   class TurboBot {
     constructor() {
-      // Internal state setup
+
       this.bots = {};
       this.textModel = "openai";
       this.imageModel = "turbo";
@@ -82,7 +82,7 @@
       };
     }
 
-    // Reporters
+
     isReady() { return true; }
     isThinking() { return this.isFetching; }
     getCurrentModel() { return `T:${this.textModel} | I:${this.imageModel}`; }
@@ -93,7 +93,6 @@
     getGenHeight() { return this.genHeight; }
     getGenWidth() { return this.genWidth; }
 
-    // Setters
     createBot({ NAME }) { if (!this.bots[NAME]) this.bots[NAME] = []; }
     deleteBot({ NAME }) { delete this.bots[NAME]; }
     setTextModel({ MOD }) { this.textModel = MOD; }
@@ -104,7 +103,7 @@
     attachFile({ URL }) { this.attachedFile = URL; }
     setImageSize({ H, W }) { this.genHeight = H; this.genWidth = W; }
 
-    // Logic
+
     async importChat({ NAME }) {
       if (!this.bots[NAME]) this.bots[NAME] = [];
       const input = document.createElement("input");
