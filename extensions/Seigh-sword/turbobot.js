@@ -84,7 +84,7 @@
       };
     }
 
-    // Reporters
+   
     isReady() { return true; }
     isThinking() { return this.isFetching; }
     getCurrentModel() { return `T:${this.textModel} | I:${this.imageModel}`; }
@@ -95,7 +95,7 @@
     getGenHeight() { return this.genHeight; }
     getGenWidth() { return this.genWidth; }
 
-    // Setters
+ 
     createBot({ NAME }) { if (!this.bots[NAME]) this.bots[NAME] = []; }
     deleteBot({ NAME }) { delete this.bots[NAME]; }
     setTextModel({ MOD }) { this.textModel = MOD; }
@@ -106,7 +106,7 @@
     attachFile({ URL }) { this.attachedFile = URL; }
     setImageSize({ H, W }) { this.genHeight = H; this.genWidth = W; }
 
-    // Logic - No async keyword here to fix lint error
+  
     importChat({ NAME }) {
       if (!this.bots[NAME]) this.bots[NAME] = [];
       const input = document.createElement("input");
@@ -150,7 +150,7 @@
       const url = this.getImageUrl({ TEXT: args.TEXT });
       this.isFetching = true;
       try {
-        // Updated to use Scratch.fetch for lint compliance
+
         const response = await Scratch.fetch(url);
         const arrayBuffer = await response.arrayBuffer();
         const storage = util.runtime.storage;
@@ -187,3 +187,4 @@
 
   Scratch.extensions.register(new TurboBot());
 })(Scratch);
+//ok I think its all, but who knows maybe more right pal ;)
