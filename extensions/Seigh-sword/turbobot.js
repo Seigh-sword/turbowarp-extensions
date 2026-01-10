@@ -27,7 +27,8 @@
       return {
         id: "TurboBotEngine",
         name: Scratch.translate("Turbo Bot"),
-        docsURI: "https://github.com/Seigh-sword/TurboBot-Turbwarp?tab=readme-ov-file#turbobot",
+        docsURI:
+          "https://github.com/Seigh-sword/TurboBot-Turbwarp?tab=readme-ov-file#turbobot",
         menuIconURI: icon,
         blockIconURI: icon,
         color1: blockColor,
@@ -133,10 +134,18 @@
           {
             opcode: "setCostumeFromPrompt",
             blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate("set image from prompt [TEXT] as costume named [NAME]"),
+            text: Scratch.translate(
+              "set image from prompt [TEXT] as costume named [NAME]"
+            ),
             arguments: {
-              TEXT: { type: Scratch.ArgumentType.STRING, defaultValue: "racecar" },
-              NAME: { type: Scratch.ArgumentType.STRING, defaultValue: "costume2" },
+              TEXT: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: "racecar",
+              },
+              NAME: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: "costume2",
+              },
             },
           },
           {
