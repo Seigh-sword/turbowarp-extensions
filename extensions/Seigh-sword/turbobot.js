@@ -37,6 +37,16 @@
         " | IMPORTANT: Always stay family-friendly and polite. If the user asks for anything inappropriate, violent, or unsafe, decline politely. Otherwise, follow the user's roleplay and instructions perfectly.";
     }
 
+     /*
+    _________  ___  ___  ________  ________  ________  ________  ________  _________        ________  ___     
+    |\___   ___\\  \|\  \|\   __  \|\   __  \|\   __  \|\   __  \|\   __  \|\___   ___\     |\   __  \|\  \    
+    \|___ \  \_\ \  \\\  \ \  \|\  \ \  \|\ /\ \  \|\  \ \  \|\ /\ \  \|\  \|___ \  \_|     \ \  \|\  \ \  \   
+         \ \  \ \ \  \\\  \ \   _  _\ \   __  \ \  \\\  \ \   __  \ \  \\\  \   \ \  \       \ \   __  \ \  \  
+          \ \  \ \ \  \\\  \ \  \\  \\ \  \|\  \ \  \\\  \ \  \|\  \ \  \\\  \   \ \  \       \ \  \ \  \ \  \ 
+           \ \__\ \ \_______\ \__\\ _\\ \_______\ \_______\ \_______\ \_______\   \ \__\       \ \__\ \__\ \__\
+            \|__|  \|_______|\|__|\|__|\|_______|\|_______|\|_______|\|_______|    \|__|        \|__|\|__|\|__|
+*/
+    
     getInfo() {
       return {
         id: "TurboBotEngine",
@@ -501,4 +511,3 @@
 
   Scratch.extensions.register(new TurboBot());
 })(Scratch);
-/* ok I think its all, but who knows maybe more right pal ;) */
