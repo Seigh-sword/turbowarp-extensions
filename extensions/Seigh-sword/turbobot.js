@@ -1,3 +1,11 @@
+// Name: Turbo Bot
+// ID: TurboBotEngine
+// Description: Advanced AI text and image generation with bot memory.
+// By: Seigh_sword
+// License: MPL-2.0
+// @turbowarp-extension
+// @unsandboxed
+
 //     _________  ___  ___  ________  ________  ________  ________  ________  _________        ________  ___     
 //    |\___   ___\\  \|\  \|\   __  \|\   __  \|\   __  \|\   __  \|\   __  \|\___   ___\     |\   __  \|\  \    
 //    \|___ \  \_\ \  \\\  \ \  \|\  \ \  \|\ /\ \  \|\  \ \  \|\ /\ \  \|\  \|___ \  \_|     \ \  \|\  \ \  \   
@@ -8,14 +16,6 @@
 //                                                                                                               
 //                                                                                                               
 //                                                                                                               
-
-// Name: Turbo Bot
-// ID: TurboBotEngine
-// Description: Advanced AI text and image generation with bot memory.
-// By: Seigh_sword
-// License: MPL-2.0
-// @turbowarp-extension
-// @unsandboxed
 
 (function (Scratch) {
   "use strict";
