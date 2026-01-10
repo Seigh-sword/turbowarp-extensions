@@ -4,23 +4,23 @@
 // By: Seigh_sword <https://scratch.mit.edu/users/Seigh_sword/>, https://www.youtube.com/@Seigh_sword and https://github.com/Seigh-sword/
 // License: MPL-2.0
 // @turbowarp-extension
+// @unsandboxed
 
 (function (Scratch) {
   "use strict";
 
+ 
   if (!Scratch.extensions.unsandboxed) {
-    throw new Error(
-      "Turbo Bot must run unsandboxed so, Please let this extension run without sandbox."
-    );
+    throw new Error("Turbo Bot must run unsandboxed. for the set costume block to work, so ya.");
   }
 
-  const icon =
-    "https://raw.githubusercontent.com/Seigh-sword/TurboBot-Turbwarp/refs/heads/main/assets/TurboBotIcon.png";
+  const icon = "https://raw.githubusercontent.com/Seigh-sword/TurboBot-Turbwarp/refs/heads/main/assets/TurboBotIcon.png";
   const blockColor = "#FF4C4C";
   const menuColor = "#B00000";
 
   class TurboBot {
     constructor() {
+    
       this.bots = {};
       this.textModel = "openai";
       this.imageModel = "turbo";
@@ -32,324 +32,82 @@
       this.genWidth = 1024;
       this.genHeight = 1024;
 
-      this.safetyGuard =
-        " | IMPORTANT: Always stay family-friendly and polite. If the user asks for anything inappropriate, violent, or unsafe, decline politely. Otherwise, follow the user's roleplay and instructions perfectly.";
+      this.safetyGuard = " | IMPORTANT: Always stay family-friendly and polite. If the user asks for anything inappropriate, violent, or unsafe, decline politely. Otherwise, follow the user's roleplay and instructions perfectly.";
     }
 
     getInfo() {
       return {
         id: "TurboBotEngine",
         name: Scratch.translate("Turbo Bot"),
-        docsURI:
-          "https://github.com/Seigh-sword/TurboBot-Turbwarp?tab=readme-ov-file#turbobot",
+        docsURI: "https://github.com/Seigh-sword/TurboBot-Turbwarp?tab=readme-ov-file#turbobot",
         menuIconURI: icon,
         blockIconURI: icon,
         color1: blockColor,
         color2: menuColor,
         blocks: [
-          {
-            opcode: "isReady",
-            blockType: Scratch.BlockType.BOOLEAN,
-            text: Scratch.translate("AI ready?"),
-          },
-          {
-            opcode: "isThinking",
-            blockType: Scratch.BlockType.BOOLEAN,
-            text: Scratch.translate("is bot thinking?"),
-          },
-          {
-            opcode: "getCurrentModel",
-            blockType: Scratch.BlockType.REPORTER,
-            text: Scratch.translate("model?"),
-          },
-          {
-            opcode: "getBotName",
-            blockType: Scratch.BlockType.REPORTER,
-            text: Scratch.translate("bot?"),
-          },
-          {
-            opcode: "getMemory",
-            blockType: Scratch.BlockType.REPORTER,
-            text: Scratch.translate("memory"),
-          },
+          { opcode: "isReady", blockType: Scratch.BlockType.BOOLEAN, text: Scratch.translate("AI ready?") },
+          { opcode: "isThinking", blockType: Scratch.BlockType.BOOLEAN, text: Scratch.translate("is bot thinking?") },
+          { opcode: "getCurrentModel", blockType: Scratch.BlockType.REPORTER, text: Scratch.translate("model?") },
+          { opcode: "getBotName", blockType: Scratch.BlockType.REPORTER, text: Scratch.translate("bot?") },
+          { opcode: "getMemory", blockType: Scratch.BlockType.REPORTER, text: Scratch.translate("memory") },
           "---",
-          {
-            opcode: "createBot",
-            blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate("create bot named [NAME]"),
-            arguments: {
-              NAME: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: "TurboBot",
-              },
-            },
-          },
-          {
-            opcode: "deleteBot",
-            blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate("delete bot named [NAME]"),
-            arguments: {
-              NAME: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: "TurboBot",
-              },
-            },
-          },
-          {
-            opcode: "exportChat",
-            blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate("export conversation of [NAME] as [TYPE]"),
-            arguments: {
-              NAME: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: "TurboBot",
-              },
-              TYPE: { type: Scratch.ArgumentType.STRING, menu: "fileMenu" },
-            },
-          },
-          {
-            opcode: "importChat",
-            blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate(
-              "import conversation from file to bot [NAME]"
-            ),
-            arguments: {
-              NAME: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: "TurboBot",
-              },
-            },
-          },
+          { opcode: "createBot", blockType: Scratch.BlockType.COMMAND, text: Scratch.translate("create bot named [NAME]"), arguments: { NAME: { type: Scratch.ArgumentType.STRING, defaultValue: "TurboBot" } } },
+          { opcode: "deleteBot", blockType: Scratch.BlockType.COMMAND, text: Scratch.translate("delete bot named [NAME]"), arguments: { NAME: { type: Scratch.ArgumentType.STRING, defaultValue: "TurboBot" } } },
+          { opcode: "exportChat", blockType: Scratch.BlockType.COMMAND, text: Scratch.translate("export conversation of [NAME] as [TYPE]"), arguments: { NAME: { type: Scratch.ArgumentType.STRING, defaultValue: "TurboBot" }, TYPE: { type: Scratch.ArgumentType.STRING, menu: "fileMenu" } } },
+          { opcode: "importChat", blockType: Scratch.BlockType.COMMAND, text: Scratch.translate("import conversation from file to bot [NAME]"), arguments: { NAME: { type: Scratch.ArgumentType.STRING, defaultValue: "TurboBot" } } },
           "---",
-          {
-            opcode: "setTextModel",
-            blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate("set text model [MOD]"),
-            arguments: {
-              MOD: { type: Scratch.ArgumentType.STRING, menu: "textMenu" },
-            },
-          },
-          {
-            opcode: "setImageModel",
-            blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate("set image model [MOD]"),
-            arguments: {
-              MOD: { type: Scratch.ArgumentType.STRING, menu: "imageMenu" },
-            },
-          },
+          { opcode: "setTextModel", blockType: Scratch.BlockType.COMMAND, text: Scratch.translate("set text model [MOD]"), arguments: { MOD: { type: Scratch.ArgumentType.STRING, menu: "textMenu" } } },
+          { opcode: "setImageModel", blockType: Scratch.BlockType.COMMAND, text: Scratch.translate("set image model [MOD]"), arguments: { MOD: { type: Scratch.ArgumentType.STRING, menu: "imageMenu" } } },
           "---",
-          {
-            opcode: "setImageSize",
-            blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate("set image gen height [H] and width [W]"),
-            arguments: {
-              H: { type: Scratch.ArgumentType.NUMBER, defaultValue: 1024 },
-              W: { type: Scratch.ArgumentType.NUMBER, defaultValue: 1024 },
-            },
-          },
-          {
-            opcode: "getGenHeight",
-            blockType: Scratch.BlockType.REPORTER,
-            text: Scratch.translate("image gen height"),
-          },
-          {
-            opcode: "getGenWidth",
-            blockType: Scratch.BlockType.REPORTER,
-            text: Scratch.translate("image gen width"),
-          },
+          { opcode: "setImageSize", blockType: Scratch.BlockType.COMMAND, text: Scratch.translate("set image gen height [H] and width [W]"), arguments: { H: { type: Scratch.ArgumentType.NUMBER, defaultValue: 1024 }, W: { type: Scratch.ArgumentType.NUMBER, defaultValue: 1024 } } },
+          { opcode: "getGenHeight", blockType: Scratch.BlockType.REPORTER, text: Scratch.translate("image gen height") },
+          { opcode: "getGenWidth", blockType: Scratch.BlockType.REPORTER, text: Scratch.translate("image gen width") },
           "---",
-          {
-            opcode: "simplePrompt",
-            blockType: Scratch.BlockType.REPORTER,
-            text: Scratch.translate("prompt [TEXT]"),
-            arguments: {
-              TEXT: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: "Hello!",
-              },
-            },
-          },
-          {
-            opcode: "setCostumeFromPrompt",
-            blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate(
-              "set image from prompt [TEXT] as costume named [NAME]"
-            ),
-            arguments: {
-              TEXT: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: "racecar",
-              },
-              NAME: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: "costume2",
-              },
-            },
-          },
-          {
-            opcode: "getImageUrl",
-            blockType: Scratch.BlockType.REPORTER,
-            text: Scratch.translate("get url for image prompt [TEXT]"),
-            arguments: {
-              TEXT: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: "a racecar",
-              },
-            },
-          },
-          {
-            opcode: "attachFile",
-            blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate("attach file url [URL]"),
-            arguments: {
-              URL: { type: Scratch.ArgumentType.STRING, defaultValue: "" },
-            },
-          },
+          { opcode: "simplePrompt", blockType: Scratch.BlockType.REPORTER, text: Scratch.translate("prompt [TEXT]"), arguments: { TEXT: { type: Scratch.ArgumentType.STRING, defaultValue: "Hello!" } } },
+          { opcode: "setCostumeFromPrompt", blockType: Scratch.BlockType.COMMAND, text: Scratch.translate("set image from prompt [TEXT] as costume named [NAME]"), arguments: { TEXT: { type: Scratch.ArgumentType.STRING, defaultValue: "racecar" }, NAME: { type: Scratch.ArgumentType.STRING, defaultValue: "costume2" } } },
+          { opcode: "getImageUrl", blockType: Scratch.BlockType.REPORTER, text: Scratch.translate("get url for image prompt [TEXT]"), arguments: { TEXT: { type: Scratch.ArgumentType.STRING, defaultValue: "a racecar" } } },
+          { opcode: "attachFile", blockType: Scratch.BlockType.COMMAND, text: Scratch.translate("attach file url [URL]"), arguments: { URL: { type: Scratch.ArgumentType.STRING, defaultValue: "" } } },
           "---",
-          {
-            opcode: "setSystem",
-            blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate("set system log [LOG]"),
-            arguments: {
-              LOG: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: "You are a helpful assistant.",
-              },
-            },
-          },
-          {
-            opcode: "setContextText",
-            blockType: Scratch.BlockType.REPORTER,
-            text: Scratch.translate("set context [CTX] and prompt [TEXT]"),
-            arguments: {
-              CTX: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: "Persona",
-              },
-              TEXT: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: "Hello!",
-              },
-            },
-          },
+          { opcode: "setSystem", blockType: Scratch.BlockType.COMMAND, text: Scratch.translate("set system log [LOG]"), arguments: { LOG: { type: Scratch.ArgumentType.STRING, defaultValue: "You are a helpful assistant." } } },
+          { opcode: "setContextText", blockType: Scratch.BlockType.REPORTER, text: Scratch.translate("set context [CTX] and prompt [TEXT]"), arguments: { CTX: { type: Scratch.ArgumentType.STRING, defaultValue: "Persona" }, TEXT: { type: Scratch.ArgumentType.STRING, defaultValue: "Hello!" } } },
           "---",
-          {
-            opcode: "setTemp",
-            blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate("set temperature [N]"),
-            arguments: {
-              N: { type: Scratch.ArgumentType.NUMBER, defaultValue: 1.0 },
-            },
-          },
-          {
-            opcode: "setSeed",
-            blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate("set seed [N]"),
-            arguments: {
-              N: { type: Scratch.ArgumentType.NUMBER, defaultValue: 12345 },
-            },
-          },
-          {
-            opcode: "getSeed",
-            blockType: Scratch.BlockType.REPORTER,
-            text: Scratch.translate("seed"),
-          },
-          {
-            opcode: "getTemp",
-            blockType: Scratch.BlockType.REPORTER,
-            text: Scratch.translate("temperature"),
-          },
+          { opcode: "setTemp", blockType: Scratch.BlockType.COMMAND, text: Scratch.translate("set temperature [N]"), arguments: { N: { type: Scratch.ArgumentType.NUMBER, defaultValue: 1.0 } } },
+          { opcode: "setSeed", blockType: Scratch.BlockType.COMMAND, text: Scratch.translate("set seed [N]"), arguments: { N: { type: Scratch.ArgumentType.NUMBER, defaultValue: 12345 } } },
+          { opcode: "getSeed", blockType: Scratch.BlockType.REPORTER, text: Scratch.translate("seed") },
+          { opcode: "getTemp", blockType: Scratch.BlockType.REPORTER, text: Scratch.translate("temperature") },
         ],
         menus: {
-          textMenu: {
-            acceptReporters: true,
-            items: [
-              "openai",
-              "mistral",
-              "gemini",
-              "deepseek-r1",
-              "p1",
-              "llama",
-            ],
-          },
-          imageMenu: {
-            acceptReporters: true,
-            items: [
-              "turbo",
-              "flux-pro",
-              "flux-realism",
-              "flux-anime",
-              "flux-3d",
-              "flux",
-              "any",
-            ],
-          },
-          fileMenu: {
-            acceptReporters: true,
-            items: ["json", "text", "markdown", "csv", "html"],
-          },
+          textMenu: { acceptReporters: true, items: ["openai", "mistral", "gemini", "deepseek-r1", "p1", "llama"] },
+          imageMenu: { acceptReporters: true, items: ["turbo", "flux-pro", "flux-realism", "flux-anime", "flux-3d", "flux", "any"] },
+          fileMenu: { acceptReporters: true, items: ["json", "text", "markdown", "csv", "html"] }
         },
       };
     }
 
-    isReady() {
-      return true;
-    }
-    isThinking() {
-      return this.isFetching;
-    }
-    getCurrentModel() {
-      return `T:${this.textModel} | I:${this.imageModel}`;
-    }
-    getBotName() {
-      return Object.keys(this.bots)[0] || "None";
-    }
-    getMemory() {
-      return JSON.stringify(this.bots);
-    }
-    getSeed() {
-      return this.seed;
-    }
-    getTemp() {
-      return this.temp;
-    }
-    getGenHeight() {
-      return this.genHeight;
-    }
-    getGenWidth() {
-      return this.genWidth;
-    }
+    // Reporters
+    isReady() { return true; }
+    isThinking() { return this.isFetching; }
+    getCurrentModel() { return `T:${this.textModel} | I:${this.imageModel}`; }
+    getBotName() { return Object.keys(this.bots)[0] || "None"; }
+    getMemory() { return JSON.stringify(this.bots); }
+    getSeed() { return this.seed; }
+    getTemp() { return this.temp; }
+    getGenHeight() { return this.genHeight; }
+    getGenWidth() { return this.genWidth; }
 
-    createBot({ NAME }) {
-      if (!this.bots[NAME]) this.bots[NAME] = [];
-    }
-    deleteBot({ NAME }) {
-      delete this.bots[NAME];
-    }
-    setTextModel({ MOD }) {
-      this.textModel = MOD;
-    }
-    setImageModel({ MOD }) {
-      this.imageModel = MOD;
-    }
-    setTemp({ N }) {
-      this.temp = N;
-    }
-    setSeed({ N }) {
-      this.seed = N;
-    }
-    setSystem({ LOG }) {
-      this.systemLog = LOG;
-    }
-    attachFile({ URL }) {
-      this.attachedFile = URL;
-    }
-    setImageSize({ H, W }) {
-      this.genHeight = H;
-      this.genWidth = W;
-    }
+    // Setters
+    createBot({ NAME }) { if (!this.bots[NAME]) this.bots[NAME] = []; }
+    deleteBot({ NAME }) { delete this.bots[NAME]; }
+    setTextModel({ MOD }) { this.textModel = MOD; }
+    setImageModel({ MOD }) { this.imageModel = MOD; }
+    setTemp({ N }) { this.temp = N; }
+    setSeed({ N }) { this.seed = N; }
+    setSystem({ LOG }) { this.systemLog = LOG; }
+    attachFile({ URL }) { this.attachedFile = URL; }
+    setImageSize({ H, W }) { this.genHeight = H; this.genWidth = W; }
 
-    async importChat({ NAME }) {
+    // Logic - No async keyword here to fix lint error
+    importChat({ NAME }) {
       if (!this.bots[NAME]) this.bots[NAME] = [];
       const input = document.createElement("input");
       input.type = "file";
@@ -361,9 +119,7 @@
           try {
             const data = JSON.parse(event.target.result);
             if (Array.isArray(data)) this.bots[NAME] = data;
-          } catch (err) {
-            console.error("Import failed");
-          }
+          } catch (err) { console.error("Import failed"); }
         };
         reader.readAsText(file);
       };
@@ -376,30 +132,11 @@
       let content = "";
       let mimeType = "text/plain";
       let extension = "txt";
-      if (TYPE === "json") {
-        content = JSON.stringify(history, null, 2);
-        mimeType = "application/json";
-        extension = "json";
-      } else if (TYPE === "text")
-        content = history.map((h) => `User: ${h.q}\nBot: ${h.a}`).join("\n\n");
-      else if (TYPE === "markdown") {
-        content = history
-          .map((h) => `### User\n${h.q}\n\n### Bot\n${h.a}`)
-          .join("\n\n---\n\n");
-        extension = "md";
-      } else if (TYPE === "csv") {
-        content =
-          "Question,Answer\n" +
-          history
-            .map(
-              (h) => `"${h.q.replace(/"/g, '""')}","${h.a.replace(/"/g, '""')}"`
-            )
-            .join("\n");
-        extension = "csv";
-      } else if (TYPE === "html") {
-        content = `<html><body>${history.map((h) => `<p><b>User:</b> ${h.q}</p><p><b>Bot:</b> ${h.a}</p><hr>`).join("")}</body></html>`;
-        extension = "html";
-      }
+      if (TYPE === "json") { content = JSON.stringify(history, null, 2); mimeType = "application/json"; extension = "json"; }
+      else if (TYPE === "text") content = history.map(h => `User: ${h.q}\nBot: ${h.a}`).join("\n\n");
+      else if (TYPE === "markdown") { content = history.map(h => `### User\n${h.q}\n\n### Bot\n${h.a}`).join("\n\n---\n\n"); extension = "md"; }
+      else if (TYPE === "csv") { content = "Question,Answer\n" + history.map(h => `"${h.q.replace(/"/g, '""')}","${h.a.replace(/"/g, '""')}"`).join("\n"); extension = "csv"; }
+      else if (TYPE === "html") { content = `<html><body>${history.map(h => `<p><b>User:</b> ${h.q}</p><p><b>Bot:</b> ${h.a}</p><hr>`).join("")}</body></html>`; extension = "html"; }
       const blob = new Blob([content], { type: mimeType });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -413,31 +150,16 @@
       const url = this.getImageUrl({ TEXT: args.TEXT });
       this.isFetching = true;
       try {
-        const response = await fetch(url);
+        // Updated to use Scratch.fetch for lint compliance
+        const response = await Scratch.fetch(url);
         const arrayBuffer = await response.arrayBuffer();
         const storage = util.runtime.storage;
-        const asset = storage.createAsset(
-          storage.AssetType.ImageBitmap,
-          storage.DataFormat.JPG,
-          new Uint8Array(arrayBuffer),
-          null,
-          true
-        );
-        const costume = {
-          name: args.NAME,
-          asset: asset,
-          md5: asset.assetId + ".jpg",
-          assetId: asset.assetId,
-          dataFormat: "jpg",
-          rotationCenterX: 0,
-          rotationCenterY: 0,
-        };
+        const asset = storage.createAsset(storage.AssetType.ImageBitmap, storage.DataFormat.JPG, new Uint8Array(arrayBuffer), null, true);
+        const costume = { name: args.NAME, asset: asset, md5: asset.assetId + ".jpg", assetId: asset.assetId, dataFormat: "jpg", rotationCenterX: 0, rotationCenterY: 0 };
         util.target.addCostume(costume);
         util.target.setCostume(util.target.getCostumeIndexByName(args.NAME));
         this.isFetching = false;
-      } catch (e) {
-        this.isFetching = false;
-      }
+      } catch (e) { this.isFetching = false; }
     }
 
     async simplePrompt({ TEXT }) {
@@ -449,23 +171,16 @@
         const res = await r.text();
         this.isFetching = false;
         const botNames = Object.keys(this.bots);
-        if (botNames.length > 0)
-          this.bots[botNames[0]].push({ q: TEXT, a: res });
+        if (botNames.length > 0) this.bots[botNames[0]].push({ q: TEXT, a: res });
         return res;
-      } catch (e) {
-        this.isFetching = false;
-        return "Error";
-      }
+      } catch (e) { this.isFetching = false; return "Error"; }
     }
 
-    async setContextText({ CTX, TEXT }) {
-      return await this.simplePrompt({ TEXT: `[Context: ${CTX}] ${TEXT}` });
-    }
+    async setContextText({ CTX, TEXT }) { return await this.simplePrompt({ TEXT: `[Context: ${CTX}] ${TEXT}` }); }
 
     getImageUrl({ TEXT }) {
       let url = `https://image.pollinations.ai/prompt/${encodeURIComponent(TEXT)}?model=${this.imageModel}&seed=${this.seed}&width=${this.genWidth}&height=${this.genHeight}&nologo=true`;
-      if (this.attachedFile)
-        url += `&feed=${encodeURIComponent(this.attachedFile)}`;
+      if (this.attachedFile) url += `&feed=${encodeURIComponent(this.attachedFile)}`;
       return url;
     }
   }
