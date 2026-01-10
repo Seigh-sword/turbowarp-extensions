@@ -41,8 +41,8 @@
       this.systemLog = "You are a helpful assistant.";
       this.attachedFile = "";
       this.isFetching = false;
-      this.genWidth = 1024;
-      this.genHeight = 1024;
+      this.genWidth = 480;
+      this.genHeight = 360;
 
       this.safetyGuard =
         " | IMPORTANT: Always stay family-friendly and polite. If the user asks for anything inappropriate, violent, or unsafe, decline politely. Otherwise, follow the user's roleplay and instructions perfectly.";
