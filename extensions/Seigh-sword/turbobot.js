@@ -9,6 +9,12 @@
 (function (Scratch) {
   "use strict";
 
+  if (!Scratch.extensions.unsandboxed) {
+    throw new Error(
+      "Turbo Bot must run unsandboxed for the set costume block to work, so please make it run unsandboxed."
+    );
+  }
+
   /**
    *  _______  __    __  .______     .______     ______   .______     ______   .___________.
    * |       ||  |  |  | |   _  \    |   _  \   /  __  \  |   _  \   /  __  \  |           |
@@ -18,12 +24,6 @@
    *     |__|   \______/  | _| `._____|______/   \______/  |______/   \______/      |__|
    *
    */
-
-  if (!Scratch.extensions.unsandboxed) {
-    throw new Error(
-      "Turbo Bot must run unsandboxed for the set costume block to work, so please make it run unsandboxed."
-    );
-  }
 
   const icon =
     "https://raw.githubusercontent.com/Seigh-sword/TurboBot-Turbwarp/refs/heads/main/assets/TurboBotIcon.png";
