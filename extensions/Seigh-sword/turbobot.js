@@ -1,3 +1,11 @@
+// Name: Turbo Bot
+// ID: TurboBotEngine
+// Description: Advanced AI text and image generation with bot memory.
+// By: Seigh_sword <https://scratch.mit.edu/users/Seigh_sword/>
+// License: MPL-2.0
+// @turbowarp-extension
+// @unsandboxed
+
 /*
     _________  ___  ___  ________  ________  ________  ________  ________  _________        ________  ___     
     |\___   ___\\  \|\  \|\   __  \|\   __  \|\   __  \|\   __  \|\   __  \|\___   ___\     |\   __  \|\  \    
@@ -7,14 +15,6 @@
            \ \__\ \ \_______\ \__\\ _\\ \_______\ \_______\ \_______\ \_______\   \ \__\       \ \__\ \__\ \__\
             \|__|  \|_______|\|__|\|__|\|_______|\|_______|\|_______|\|_______|    \|__|        \|__|\|__|\|__|
 */
-
-// Name: Turbo Bot
-// ID: TurboBotEngine
-// Description: Advanced AI text and image generation with bot memory.
-// By: Seigh_sword <https://scratch.mit.edu/users/Seigh_sword/>
-// License: MPL-2.0
-// @turbowarp-extension
-// @unsandboxed
 
 (function (Scratch) {
   "use strict";
