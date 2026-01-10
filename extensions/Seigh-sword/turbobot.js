@@ -15,7 +15,12 @@
     );
   }
 
-  /**
+  const icon =
+    "https://raw.githubusercontent.com/Seigh-sword/TurboBot-Turbwarp/refs/heads/main/assets/TurboBotIcon.png";
+  const blockColor = "#FF4C4C";
+  const menuColor = "#B00000";
+
+    /**
    *  _______  __    __  .______     .______     ______   .______     ______   .___________.
    * |       ||  |  |  | |   _  \    |   _  \   /  __  \  |   _  \   /  __  \  |           |
    * `---.  .-'|  |  |  | |  |_)  |   |  |_)  | |  |  |  | |  |_)  | |  |  |  | `---|  |----`
@@ -24,11 +29,6 @@
    *     |__|   \______/  | _| `._____|______/   \______/  |______/   \______/      |__|
    *
    */
-
-  const icon =
-    "https://raw.githubusercontent.com/Seigh-sword/TurboBot-Turbwarp/refs/heads/main/assets/TurboBotIcon.png";
-  const blockColor = "#FF4C4C";
-  const menuColor = "#B00000";
 
   class TurboBot {
     constructor() {
