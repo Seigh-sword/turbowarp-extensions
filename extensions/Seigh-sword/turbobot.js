@@ -1,12 +1,6 @@
-// Name: Turbo Bot
-// ID: TurboBotEngine
-// Description: Advanced AI text and image generation with bot memory.
-// By: Seigh_sword <https://scratch.mit.edu/users/Seigh_sword/>
-// License: MPL-2.0
-
 (function (Scratch) {
   "use strict";
-  //the starting of a new function
+
   const icon =
     "https://raw.githubusercontent.com/Seigh-sword/TurboBot-Turbwarp/refs/heads/main/assets/TurboBotIcon.png";
   const blockColor = "#FF4C4C";
@@ -22,6 +16,8 @@
       this.systemLog = "You are a helpful assistant.";
       this.attachedFile = "";
       this.isFetching = false;
+      this.genWidth = 1024;
+      this.genHeight = 1024;
 
       this.safetyGuard =
         " | IMPORTANT: Always stay family-friendly and polite. If the user asks for anything inappropriate, violent, or unsafe, decline politely. Otherwise, follow the user's roleplay and instructions perfectly.";
@@ -104,6 +100,26 @@
           },
           "---",
           {
+            opcode: "setImageSize",
+            blockType: Scratch.BlockType.COMMAND,
+            text: Scratch.translate("set image gen height [H] and width [W]"),
+            arguments: {
+              H: { type: Scratch.ArgumentType.NUMBER, defaultValue: 1024 },
+              W: { type: Scratch.ArgumentType.NUMBER, defaultValue: 1024 },
+            },
+          },
+          {
+            opcode: "getGenHeight",
+            blockType: Scratch.BlockType.REPORTER,
+            text: Scratch.translate("image gen height"),
+          },
+          {
+            opcode: "getGenWidth",
+            blockType: Scratch.BlockType.REPORTER,
+            text: Scratch.translate("image gen width"),
+          },
+          "---",
+          {
             opcode: "simplePrompt",
             blockType: Scratch.BlockType.REPORTER,
             text: Scratch.translate("prompt [TEXT]"),
@@ -112,6 +128,15 @@
                 type: Scratch.ArgumentType.STRING,
                 defaultValue: "Hello!",
               },
+            },
+          },
+          {
+            opcode: "setCostumeFromPrompt",
+            blockType: Scratch.BlockType.COMMAND,
+            text: Scratch.translate("set image from prompt [TEXT] as costume named [NAME]"),
+            arguments: {
+              TEXT: { type: Scratch.ArgumentType.STRING, defaultValue: "racecar" },
+              NAME: { type: Scratch.ArgumentType.STRING, defaultValue: "costume2" },
             },
           },
           {
@@ -201,7 +226,7 @@
             ],
           },
           imageMenu: {
-            acceptReporters: true, //cool design it looks like a triangle, wait is one!
+            acceptReporters: true,
             items: [
               "turbo",
               "flux-pro",
@@ -263,6 +288,48 @@
       this.attachedFile = URL;
     }
 
+    setImageSize({ H, W }) {
+      this.genHeight = H;
+      this.genWidth = W;
+    }
+    getGenHeight() {
+      return this.genHeight;
+    }
+    getGenWidth() {
+      return this.genWidth;
+    }
+
+    async setCostumeFromPrompt(args, util) {
+      const url = this.getImageUrl({ TEXT: args.TEXT });
+      this.isFetching = true;
+      try {
+        const response = await fetch(url);
+        const arrayBuffer = await response.arrayBuffer();
+        const storage = util.runtime.storage;
+        const asset = storage.createAsset(
+          storage.AssetType.ImageBitmap,
+          storage.DataFormat.JPG,
+          new Uint8Array(arrayBuffer),
+          null,
+          true
+        );
+        const costume = {
+          name: args.NAME,
+          asset: asset,
+          md5: asset.assetId + ".jpg",
+          assetId: asset.assetId,
+          dataFormat: "jpg",
+          rotationCenterX: asset.data ? asset.data.width / 2 : 0,
+          rotationCenterY: asset.data ? asset.data.height / 2 : 0,
+        };
+        util.target.addCostume(costume);
+        util.target.setCostume(util.target.getCostumeIndexByName(args.NAME));
+        this.isFetching = false;
+      } catch (e) {
+        this.isFetching = false;
+      }
+    }
+
     async simplePrompt({ TEXT }) {
       this.isFetching = true;
       try {
@@ -270,7 +337,7 @@
 
         const url = `https://text.pollinations.ai/${encodeURIComponent(TEXT)}?model=${this.textModel}&system=${encodeURIComponent(fullSystem)}&seed=${this.seed}&temperature=${this.temp}`;
 
-        const r = await Scratch.fetch(url);
+        const r = await fetch(url);
         if (!r.ok) {
           this.isFetching = false;
           return "Network error!! AI is sleeping?";
@@ -292,7 +359,7 @@
 
     getImageUrl({ TEXT }) {
       try {
-        let url = `https://image.pollinations.ai/prompt/${encodeURIComponent(TEXT)}?model=${this.imageModel}&seed=${this.seed}&nologo=true`;
+        let url = `https://image.pollinations.ai/prompt/${encodeURIComponent(TEXT)}?model=${this.imageModel}&seed=${this.seed}&width=${this.genWidth}&height=${this.genHeight}&nologo=true`;
         if (this.attachedFile)
           url += `&feed=${encodeURIComponent(this.attachedFile)}`;
         return url;
@@ -308,4 +375,3 @@
 
   Scratch.extensions.register(new TurboBot());
 })(Scratch);
-//the end.
