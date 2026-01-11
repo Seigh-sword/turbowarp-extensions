@@ -18,19 +18,23 @@
 (function (Scratch) {
   "use strict";
 
+  //PRIVACY & SECURITY NOTE: 
+  //This extension only needs unsandboxed mode Only to allow the AI to upload generated image into users sprite's costumes Sandboxed exetensions are not allowed to accesse TurboWarp's asset system or service.
+
   if (!Scratch.extensions.unsandboxed) {
     throw new Error(
-      "Turbo Bot must run unsandboxed for the set costume block to work, so please make it run unsandboxed."
+      "Turbo Bot must run unsandboxed as its made unsandoxed, becuase of a block for importing the image gen by AI to the costume editor"
     );
   }
 
   const icon =
-    "https://raw.githubusercontent.com/Seigh-sword/TurboBot-Turbwarp/refs/heads/main/assets/TurboBotIcon.png";
+    "https://raw.githubusercontent.com/Seigh-sword/TurboBot-Turbwarp/refs/heads/main/assets/TurboBotIcon.png"; // to get my image icon for the icon for my blocks
   const blockColor = "#FF4C4C";
   const menuColor = "#B00000";
 
   class TurboBot {
     constructor() {
+
       this.bots = {};
       this.textModel = "openai";
       this.imageModel = "turbo";
@@ -39,8 +43,8 @@
       this.systemLog = "You are a helpful assistant.";
       this.attachedFile = "";
       this.isFetching = false;
-      this.genWidth = 1024;
-      this.genHeight = 1024;
+      this.genWidth = 480;
+      this.genHeight = 360;
 
       this.safetyGuard =
         " | IMPORTANT: Always stay family-friendly and polite. If the user asks for anything inappropriate, violent, or unsafe, decline politely. Otherwise, follow the user's roleplay and instructions perfectly.";
@@ -121,9 +125,9 @@
             },
           },
           {
-            opcode: "exportChat",
-            blockType: Scratch.BlockType.COMMAND,
-            text: Scratch.translate("export conversation of [NAME] as [TYPE]"),
+            opcode: "exportBot",
+            blockType: Scratch.BlockType.REPORTER,
+            text: Scratch.translate("export bot [NAME] as [TYPE]"),
             arguments: {
               NAME: {
                 type: Scratch.ArgumentType.STRING,
@@ -133,12 +137,14 @@
             },
           },
           {
-            opcode: "importChat",
+            opcode: "importBot",
             blockType: Scratch.BlockType.COMMAND,
             text: Scratch.translate(
-              "import conversation from file to bot [NAME]"
+              "import conversation [TEXT] as [TYPE] to bot [NAME]"
             ),
             arguments: {
+              TEXT: { type: Scratch.ArgumentType.STRING, defaultValue: "[]" },
+              TYPE: { type: Scratch.ArgumentType.STRING, menu: "fileMenu" },
               NAME: {
                 type: Scratch.ArgumentType.STRING,
                 defaultValue: "TurboBot",
@@ -317,6 +323,7 @@
       };
     }
 
+    /* Core logic for managing bot data and configuration */
     isReady() {
       return true;
     }
@@ -383,71 +390,63 @@
       this.genWidth = W;
     }
 
-    importChat({ NAME }) {
+    /* Chat Export/Import Reporters */
+    importBot({ TEXT, TYPE, NAME }) {
       if (!this.bots[NAME]) this.bots[NAME] = [];
-      const input = document.createElement("input");
-      input.type = "file";
-      input.accept = ".json";
-      input.onchange = (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          try {
-            const data = JSON.parse(event.target.result);
-            if (Array.isArray(data)) this.bots[NAME] = data;
-          } catch (err) {
-            console.error("Import failed");
-          }
-        };
-        reader.readAsText(file);
-      };
-      input.click();
+      try {
+        if (TYPE === "json") {
+          const data = JSON.parse(TEXT);
+          if (Array.isArray(data)) this.bots[NAME] = data;
+        } else {
+          this.bots[NAME].push({ q: "Imported Data", a: TEXT });
+        }
+      } catch (err) {
+        console.error("Import failed: Invalid Format");
+      }
     }
 
-    exportChat({ NAME, TYPE }) {
+    exportBot({ NAME, TYPE }) {
       const history = this.bots[NAME];
-      if (!history || history.length === 0) return;
-      let content = "";
-      let mimeType = "text/plain";
-      let extension = "txt";
+      if (!history || history.length === 0) return "";
+
       if (TYPE === "json") {
-        content = JSON.stringify(history, null, 2);
-        mimeType = "application/json";
-        extension = "json";
+        return JSON.stringify(history);
       } else if (TYPE === "text") {
-        content = history.map((h) => `User: ${h.q}\nBot: ${h.a}`).join("\n\n");
+        return history.map((h) => `User: ${h.q}\nBot: ${h.a}`).join("\n\n");
       } else if (TYPE === "markdown") {
-        content = history
+        return history
           .map((h) => `### User\n${h.q}\n\n### Bot\n${h.a}`)
           .join("\n\n---\n\n");
-        extension = "md";
       } else if (TYPE === "csv") {
-        content =
+        return (
           "Question,Answer\n" +
           history
             .map(
               (h) => `"${h.q.replace(/"/g, '""')}","${h.a.replace(/"/g, '""')}"`
             )
-            .join("\n");
-        extension = "csv";
+            .join("\n")
+        );
       } else if (TYPE === "html") {
-        content = `<html><body>${history.map((h) => `<p><b>User:</b> ${h.q}</p><p><b>Bot:</b> ${h.a}</p><hr>`).join("")}</body></html>`;
-        extension = "html";
+        return `<html><body>${history.map((h) => `<p><b>User:</b> ${h.q}</p><p><b>Bot:</b> ${h.a}</p><hr>`).join("")}</body></html>`;
       }
-      const blob = new Blob([content], { type: mimeType });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${NAME}_chat.${extension}`;
-      a.click();
-      URL.revokeObjectURL(url);
+      return "";
     }
 
+    /* Costume Block - Needs Unsandboxed for storage.createAsset */
     async setCostumeFromPrompt(args, util) {
       const imageUrl = this.getImageUrl({ TEXT: args.TEXT });
       this.isFetching = true;
       try {
-        const svgContent = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${this.genWidth}" height="${this.genHeight}" viewBox="0 0 ${this.genWidth} ${this.genHeight}"><image width="${this.genWidth}" height="${this.genHeight}" xlink:href="${imageUrl}"/></svg>`;
+        const response = await Scratch.fetch(imageUrl);
+        const blob = await response.blob();
+        
+        const reader = new FileReader();
+        const dataUrl = await new Promise((resolve) => {
+          reader.onloadend = () => resolve(reader.result);
+          reader.readAsDataURL(blob);
+        });
+
+        const svgContent = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${this.genWidth}" height="${this.genHeight}" viewBox="0 0 ${this.genWidth} ${this.genHeight}"><image width="${this.genWidth}" height="${this.genHeight}" xlink:href="${dataUrl}"/></svg>`;
         const storage = util.runtime.storage;
 
         const asset = await storage.createAsset(
@@ -475,7 +474,7 @@
       }
     }
 
-    // Text generation logic
+    /* AI Text Request Logic */
     async simplePrompt({ TEXT }) {
       this.isFetching = true;
       try {
