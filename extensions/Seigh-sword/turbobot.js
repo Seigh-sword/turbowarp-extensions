@@ -18,7 +18,7 @@
 (function (Scratch) {
   "use strict";
 
-  //PRIVACY & SECURITY NOTE: 
+  //PRIVACY & SECURITY NOTE:
   //This extension only needs unsandboxed mode Only to allow the AI to upload generated image into users sprite's costumes Sandboxed exetensions are not allowed to accesse TurboWarp's asset system or service.
 
   if (!Scratch.extensions.unsandboxed) {
@@ -34,7 +34,6 @@
 
   class TurboBot {
     constructor() {
-
       this.bots = {};
       this.textModel = "openai";
       this.imageModel = "turbo";
@@ -439,7 +438,7 @@
       try {
         const response = await Scratch.fetch(imageUrl);
         const blob = await response.blob();
-        
+
         const reader = new FileReader();
         const dataUrl = await new Promise((resolve) => {
           reader.onloadend = () => resolve(reader.result);
