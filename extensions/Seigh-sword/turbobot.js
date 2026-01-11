@@ -168,8 +168,8 @@
             blockType: Scratch.BlockType.COMMAND,
             text: Scratch.translate("set image gen height [H] and width [W]"),
             arguments: {
-              H: { type: Scratch.ArgumentType.NUMBER, defaultValue: 1024 },
-              W: { type: Scratch.ArgumentType.NUMBER, defaultValue: 1024 },
+              H: { type: Scratch.ArgumentType.NUMBER, defaultValue: 360 },
+              W: { type: Scratch.ArgumentType.NUMBER, defaultValue: 480 },
             },
           },
           {
