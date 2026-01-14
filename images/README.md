@@ -119,9 +119,9 @@ All images in this folder are licensed under the [GNU General Public License ver
  - Based on https://github.com/ScratchCE/scratch-gui/blob/develop/src/lib/libraries/extensions/strings/strings.png by [@JoshsAccount](https://scratch.mit.edu/users/JoshsAccount/) under [The GNU General Public License version 3](https://www.gnu.org/licenses/gpl-3.0.html).
 
 ## Seigh-sword/turbobot.svg
-- Created by **[@Seigh-sword](https://github.com/Seigh-sword/)** in [canva](https://www.canva.com/)
-- Used **[Turbowarp's](https://turbowarp.org/)** logo on the top-left corner as the logo
-- Used [PhotoPea](https://www.photopea.com/) to make the file from png to svg and resize and used other tools like blur, and to make it the form that we know now
+- The icon on the side was **Created by **[@Seigh-sword](https://github.com/Seigh-sword/)** in [canva](https://www.canva.com/)**
+- Used **[Turbowarp's](https://turbowarp.org/)** logo on the icon, and also make other assets for this banner
+- Used [PhotoPea](https://www.photopea.com/) for attaching every assets made from differnt platforms and enhancing the banner even more.
 
 ## Lily/lmsutils.svg
  - Created by [@HamsterCreativity](https://scratch.mit.edu/users/HamsterCreativity/) in https://github.com/TurboWarp/extensions/issues/90#issuecomment-1694410464.
