@@ -1,5 +1,5 @@
 // Name: Turbo Bot
-// ID: TurboBotEngine
+// ID: TurboBotAI
 // Description: Advanced AI text and image generation with bot memory.
 // By: Seigh_sword <https://scratch.mit.edu/users/Seigh-sword/>
 // License: MPL-2.0
@@ -51,7 +51,7 @@
 
     getInfo() {
       return {
-        id: "TurboBotEngine",
+        id: "TurboBotAI",
         name: Scratch.translate("Turbo Bot"),
         docsURI:
           "https://github.com/Seigh-sword/TurboBot-Turbwarp?tab=readme-ov-file#turbobot",
