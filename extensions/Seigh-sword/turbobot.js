@@ -59,9 +59,8 @@
       return {
         id: "TurboBotAI",
         name: Scratch.translate("Turbo Bot"),
-        sampleURL:
-          "https://turbowarp.org/editor?project_url=https://extensions.turbowarp.org/samples/Turbobot_sample.sb3",
-        docsURI: "https://docs.turbowarp.org/extensions/Seigh-sword/turbobot",
+        docsURI:
+          "https://docs.turbowarp.org/extensions/Seigh-sword/turbobot",
         menuIconURI: icon,
         blockIconURI: icon,
         color1: blockColor,
