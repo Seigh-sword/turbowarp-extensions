@@ -38,36 +38,6 @@
       this.bots = {};
       this.textModel = "openai";
       this.imageModel = "turbo";
-      this.temp = 1;
-      this.seed = Math.floor(Math.random() * 999999);
-      this.systemLog = "You are a helpful assistant.";
-      this.attachedFile = "";
-      this.isFetching = false;
-      this.genWidth = 480;
-      this.genHeight = 360;
-
-      this.lastTextTime = 0;
-      this.lastImageTime = 0;
-      this.textCooldown = 1000;
-      this.imageCooldown = 32000;
-
-      this.safetyGuard =
-        " | IMPORTANT: Always stay family-friendly and polite. If the user asks for anything inappropriate, decline politely.";
-    }
-
-    getInfo() {
-      return {
-        (function (Scratch) {
-  "use strict";
-
- (function (Scratch) {
-  "use strict";
-
-  class TurboBot {
-    constructor() {
-      this.bots = {};
-      this.textModel = "openai";
-      this.imageModel = "turbo";
       this.seed = 12345;
       this.temp = 1.0;
       this.genHeight = 360;
@@ -80,14 +50,15 @@
       this.lastImageTime = 0;
       this.imageCooldown = 5000;
       this.attachedFile = "";
-      this.maxTokens = 250; 
+      this.maxTokens = 250;
     }
 
     getInfo() {
       return {
         id: "TurboBotAI",
         name: Scratch.translate("Turbo Bot"),
-        docsURI: "https://github.com/Seigh-sword/TurboBot-Turbwarp?tab=readme-ov-file#turbobot",
+        docsURI:
+          "https://github.com/Seigh-sword/TurboBot-Turbwarp?tab=readme-ov-file#turbobot",
         blocks: [
           {
             opcode: "isReady",
@@ -120,7 +91,10 @@
             blockType: Scratch.BlockType.COMMAND,
             text: Scratch.translate("create bot named [NAME]"),
             arguments: {
-              NAME: { type: Scratch.ArgumentType.STRING, defaultValue: "TurboBot" },
+              NAME: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: "TurboBot",
+              },
             },
           },
           {
@@ -128,8 +102,14 @@
             blockType: Scratch.BlockType.COMMAND,
             text: Scratch.translate("rename [NAME1] to [NAME2]"),
             arguments: {
-              NAME1: { type: Scratch.ArgumentType.STRING, defaultValue: "TurboBot" },
-              NAME2: { type: Scratch.ArgumentType.STRING, defaultValue: "TurboPal" },
+              NAME1: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: "TurboBot",
+              },
+              NAME2: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: "TurboPal",
+              },
             },
           },
           {
@@ -137,7 +117,10 @@
             blockType: Scratch.BlockType.COMMAND,
             text: Scratch.translate("delete bot named [NAME]"),
             arguments: {
-              NAME: { type: Scratch.ArgumentType.STRING, defaultValue: "TurboBot" },
+              NAME: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: "TurboBot",
+              },
             },
           },
           "---",
@@ -168,7 +151,10 @@
             blockType: Scratch.BlockType.REPORTER,
             text: Scratch.translate("prompt [TEXT]"),
             arguments: {
-              TEXT: { type: Scratch.ArgumentType.STRING, defaultValue: "Hello!" },
+              TEXT: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: "Hello!",
+              },
             },
           },
           {
@@ -176,7 +162,10 @@
             blockType: Scratch.BlockType.COMMAND,
             text: Scratch.translate("set system log [LOG]"),
             arguments: {
-              LOG: { type: Scratch.ArgumentType.STRING, defaultValue: "You are a helpful assistant." },
+              LOG: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: "You are a helpful assistant.",
+              },
             },
           },
           {
@@ -191,14 +180,25 @@
         menus: {
           textMenu: {
             acceptReporters: true,
-            items: ["openai", "mistral", "gemini", "deepseek-r1", "p1", "llama"],
-          }
+            items: [
+              "openai",
+              "mistral",
+              "gemini",
+              "deepseek-r1",
+              "p1",
+              "llama",
+            ],
+          },
         },
       };
     }
 
-    setMaxTokens({ N }) { this.maxTokens = N; }
-    getMaxTokens() { return this.maxTokens; }
+    setMaxTokens({ N }) {
+      this.maxTokens = N;
+    }
+    getMaxTokens() {
+      return this.maxTokens;
+    }
 
     async simplePrompt({ TEXT }) {
       if (!TEXT || TEXT.trim() === "") return "";
@@ -210,7 +210,7 @@
       try {
         const fullSystem = this.systemLog + this.safetyGuard;
         const url = `https://text.pollinations.ai/${encodeURIComponent(TEXT)}?model=${this.textModel}&system=${encodeURIComponent(fullSystem)}&seed=${this.seed}&temperature=${this.temp}&max_tokens=${this.maxTokens}`;
-        
+
         const r = await Scratch.fetch(url);
         const res = await r.text();
         this.isFetching = false;
@@ -221,22 +221,42 @@
       }
     }
 
-    isReady() { return true; }
-    isThinking() { return this.isFetching; }
-    getCurrentModel() { return `Model: ${this.textModel}`; }
-    getBotName() { return Object.keys(this.bots)[0] || "None"; }
-    getMemory() { return JSON.stringify(this.bots); }
-    createBot({ NAME }) { if (!this.bots[NAME]) this.bots[NAME] = []; }
+    isReady() {
+      return true;
+    }
+    isThinking() {
+      return this.isFetching;
+    }
+    getCurrentModel() {
+      return `Model: ${this.textModel}`;
+    }
+    getBotName() {
+      return Object.keys(this.bots)[0] || "None";
+    }
+    getMemory() {
+      return JSON.stringify(this.bots);
+    }
+    createBot({ NAME }) {
+      if (!this.bots[NAME]) this.bots[NAME] = [];
+    }
     renameBot({ NAME1, NAME2 }) {
       if (this.bots[NAME1] && !this.bots[NAME2]) {
         this.bots[NAME2] = this.bots[NAME1];
         delete this.bots[NAME1];
       }
     }
-    deleteBot({ NAME }) { delete this.bots[NAME]; }
-    setTextModel({ MOD }) { this.textModel = MOD; }
-    setSystem({ LOG }) { this.systemLog = LOG; }
-    setTemp({ N }) { this.temp = N; }
+    deleteBot({ NAME }) {
+      delete this.bots[NAME];
+    }
+    setTextModel({ MOD }) {
+      this.textModel = MOD;
+    }
+    setSystem({ LOG }) {
+      this.systemLog = LOG;
+    }
+    setTemp({ N }) {
+      this.temp = N;
+    }
   }
 
   Scratch.extensions.register(new TurboBot());
