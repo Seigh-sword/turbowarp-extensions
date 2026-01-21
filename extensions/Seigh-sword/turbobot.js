@@ -1,7 +1,7 @@
 // Name: Turbo Bot
 // ID: TurboBotAI
 // Description: Advanced AI text and image generation with bot memory.
-// By: Seigh_sword <https://scratch.mit.edu/users/Seigh-sword/>
+// By: Seigh_sword <https://scratch.mit.edu/users/Seigh-sword/>, also join the discord <https://discord.com/invite/QnJXQw2gJE>
 // License: MPL-2.0
 // @turbowarp-extension
 // @unsandboxed
