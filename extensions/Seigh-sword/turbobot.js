@@ -316,7 +316,7 @@
             blockType: Scratch.BlockType.BUTTON,
             text: Scratch.translate("Join Discord Server"),
             func: "joinDiscord",
-          }
+          },
         ],
         menus: {
           textMenu: {
@@ -438,10 +438,23 @@
       const history = this.bots[NAME];
       if (!history || history.length === 0) return "";
       if (TYPE === "json") return JSON.stringify(history);
-      if (TYPE === "text") return history.map((h) => `User: ${h.q}\nBot: ${h.a}`).join("\n\n");
-      if (TYPE === "markdown") return history.map((h) => `### User\n${h.q}\n\n### Bot\n${h.a}`).join("\n\n---\n\n");
-      if (TYPE === "csv") return "Question,Answer\n" + history.map((h) => `"${h.q.replace(/"/g, '""')}","${h.a.replace(/"/g, '""')}"`).join("\n");
-      if (TYPE === "html") return `<html><body>${history.map((h) => `<p><b>User:</b> ${h.q}</p><p><b>Bot:</b> ${h.a}</p><hr>`).join("")}</body></html>`;
+      if (TYPE === "text")
+        return history.map((h) => `User: ${h.q}\nBot: ${h.a}`).join("\n\n");
+      if (TYPE === "markdown")
+        return history
+          .map((h) => `### User\n${h.q}\n\n### Bot\n${h.a}`)
+          .join("\n\n---\n\n");
+      if (TYPE === "csv")
+        return (
+          "Question,Answer\n" +
+          history
+            .map(
+              (h) => `"${h.q.replace(/"/g, '""')}","${h.a.replace(/"/g, '""')}"`
+            )
+            .join("\n")
+        );
+      if (TYPE === "html")
+        return `<html><body>${history.map((h) => `<p><b>User:</b> ${h.q}</p><p><b>Bot:</b> ${h.a}</p><hr>`).join("")}</body></html>`;
       return "";
     }
 
@@ -450,13 +463,16 @@
     }
 
     openDocs() {
-      Scratch.openWindow("https://github.com/Seigh-sword/TurboBot-Turbwarp?tab=readme-ov-file#turbobot");
+      Scratch.openWindow(
+        "https://github.com/Seigh-sword/TurboBot-Turbwarp?tab=readme-ov-file#turbobot"
+      );
     }
 
     async simplePrompt({ TEXT }) {
       if (!TEXT || TEXT.trim() === "") return "";
       const now = Date.now();
-      if (now - this.lastTextTime < this.textCooldown) return "Cooldown active (1s).";
+      if (now - this.lastTextTime < this.textCooldown)
+        return "Cooldown active (1s).";
       this.lastTextTime = now;
       this.isFetching = true;
       try {
@@ -467,24 +483,35 @@
         this.isFetching = false;
         if (res && res.trim() !== "") {
           const botNames = Object.keys(this.bots);
-          if (botNames.length > 0) this.bots[botNames[0]].push({ q: TEXT, a: res });
+          if (botNames.length > 0)
+            this.bots[botNames[0]].push({ q: TEXT, a: res });
         }
         return res;
-      } catch (e) { this.isFetching = false; return "Error"; }
+      } catch (e) {
+        this.isFetching = false;
+        return "Error";
+      }
     }
 
-    async setContextText({ CTX, TEXT }) { return await this.simplePrompt({ TEXT: `[Context: ${CTX}] ${TEXT}` }); }
+    async setContextText({ CTX, TEXT }) {
+      return await this.simplePrompt({ TEXT: `[Context: ${CTX}] ${TEXT}` });
+    }
 
     _buildImageUrl(ctx, text) {
       if (!text || text.trim() === "") return "";
       const fullPrompt = ctx ? `${ctx}, ${text}` : text;
       let url = `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?model=${this.imageModel}&seed=${this.seed}&width=${this.genWidth}&height=${this.genHeight}&nologo=true`;
-      if (this.attachedFile) url += `&feed=${encodeURIComponent(this.attachedFile)}`;
+      if (this.attachedFile)
+        url += `&feed=${encodeURIComponent(this.attachedFile)}`;
       return url;
     }
 
-    setContextImageURL({ CTX, TEXT }) { return this._buildImageUrl(CTX, TEXT); }
-    getImageUrl({ TEXT }) { return this._buildImageUrl("", TEXT); }
+    setContextImageURL({ CTX, TEXT }) {
+      return this._buildImageUrl(CTX, TEXT);
+    }
+    getImageUrl({ TEXT }) {
+      return this._buildImageUrl("", TEXT);
+    }
 
     async setCostumeFromPrompt(args, util) {
       const url = this._buildImageUrl("", args.TEXT);
@@ -505,16 +532,35 @@
           reader.readAsDataURL(blob);
         });
         const oldIndex = util.target.getCostumeIndexByName(name);
-        if (oldIndex !== -1) { util.target.deleteCostume(oldIndex); }
+        if (oldIndex !== -1) {
+          util.target.deleteCostume(oldIndex);
+        }
         const svgContent = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${this.genWidth}" height="${this.genHeight}" viewBox="0 0 ${this.genWidth} ${this.genHeight}"><image width="${this.genWidth}" height="${this.genHeight}" xlink:href="${dataUrl}"/></svg>`;
         const storage = util.runtime.storage;
-        const asset = await storage.createAsset(storage.AssetType.ImageVector, storage.DataFormat.SVG, new TextEncoder().encode(svgContent), null, true);
-        const costume = { name: name, asset: asset, md5: asset.assetId + ".svg", assetId: asset.assetId, dataFormat: "svg", rotationCenterX: this.genWidth / 2, rotationCenterY: this.genHeight / 2 };
+        const asset = await storage.createAsset(
+          storage.AssetType.ImageVector,
+          storage.DataFormat.SVG,
+          new TextEncoder().encode(svgContent),
+          null,
+          true
+        );
+        const costume = {
+          name: name,
+          asset: asset,
+          md5: asset.assetId + ".svg",
+          assetId: asset.assetId,
+          dataFormat: "svg",
+          rotationCenterX: this.genWidth / 2,
+          rotationCenterY: this.genHeight / 2,
+        };
         util.target.addCostume(costume);
         util.target.setCostume(util.target.getCostumeIndexByName(name));
         this.lastImageTime = Date.now();
         this.isFetching = false;
-      } catch (e) { this.isFetching = false; console.error("Costume gen failed", e); }
+      } catch (e) {
+        this.isFetching = false;
+        console.error("Costume gen failed", e);
+      }
     }
   }
 
