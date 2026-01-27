@@ -311,12 +311,7 @@
             blockType: Scratch.BlockType.REPORTER,
             text: Scratch.translate("temperature"),
           },
-          {
-            opcode: "joinDiscord",
-            blockType: Scratch.BlockType.BUTTON,
-            text: Scratch.translate("Join Discord Server"),
-            func: "joinDiscord",
-          },
+       // removed the discord it used to be here... but its now to the umm.. the docs go check!
         ],
         menus: {
           textMenu: {
@@ -456,16 +451,6 @@
       if (TYPE === "html")
         return `<html><body>${history.map((h) => `<p><b>User:</b> ${h.q}</p><p><b>Bot:</b> ${h.a}</p><hr>`).join("")}</body></html>`;
       return "";
-    }
-
-    joinDiscord() {
-      Scratch.openWindow("https://discord.com/invite/DJ9EWXhnNC");
-    }
-
-    openDocs() {
-      Scratch.openWindow(
-        "https://github.com/Seigh-sword/TurboBot-Turbwarp?tab=readme-ov-file#turbobot"
-      );
     }
 
     async simplePrompt({ TEXT }) {
