@@ -311,7 +311,7 @@
             blockType: Scratch.BlockType.REPORTER,
             text: Scratch.translate("temperature"),
           },
-       // removed the discord it used to be here... but its now to the umm.. the docs go check!
+          // removed the discord it used to be here... but its now to the umm.. the docs go check!
         ],
         menus: {
           textMenu: {
